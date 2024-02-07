@@ -47,9 +47,6 @@ loss = tf.keras.losses.CategoricalCrossentropy(from_logits=True)
 model.compile(optimizer=optimizer, loss=loss, metrics=['accuracy'])
 
 # Train the model
-with tf.device('/CPU:0'):
-    model = TFAutoModelForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=len(np.unique(text['label'])))
-
 model.fit(train_dataset, epochs=3, validation_data=test_dataset)
     
 
