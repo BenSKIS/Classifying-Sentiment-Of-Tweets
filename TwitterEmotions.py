@@ -31,16 +31,10 @@ df = tf.data.Dataset.from_tensor_slices((dict(t_text),labels))
 
 split = .3
 total = len(texts)
-
 train_size = int((1-split)*len(texts))
 test_size = len(texts) - train_size
 train_dataset = df.take(train_size).batch(4).cache().prefetch(buffer_size=tf.data.AUTOTUNE)
 test_dataset = df.skip(train_size).batch(4).cache().prefetch(buffer_size=tf.data.AUTOTUNE)
-
-def split_labels(x,y):
-    return x,y
-df
-
 
 # Define the model
 with tf.device('/CPU:0'):
@@ -65,22 +59,6 @@ model.fit(train_dataset, epochs=3, validation_data=test_dataset)
 
 
 
-
-
-
-
-
-import keras_nlp
-
-classifier1 = keras_nlp.models.BertClassifier.from_preset('bert_base_multi',num_classes = 6)
-classifier1.compile(optimizer=keras.optimizers.Adam(),loss=keras.losses.CategoricalCrossentropy(from_logits=True),metrics=['accuracy'])
-
-EPOCHS = 3
-classifier1.summary()
- with tf.device('/GPU:0'):
-    classifier1.fit(,epochs=EPOCHS,validation_data = test_pre)
-
-classifier1.fit(train_dataset,epochs=EPOCHS,validation_data = test_dataset)
 
 
 
